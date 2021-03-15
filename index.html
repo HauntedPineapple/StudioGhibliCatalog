@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Studio Ghibli Library</title>
+
+    <link rel="icon" type="image/png" href="assets/favicons/mini_totoro_Favicon/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="assets/favicons/mini_totoro_Favicon/favicon-16x16.png" sizes="16x16" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/ghibliStyle.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+JP&family=Roboto&family=Roboto+Condensed&display=swap">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <img id="logo" src="images/Studio_Ghibli_logo.svg" alt="Logo of Studio Ghibli">
+        <h1 id="headText">Movie Catalog</h1>
+        <div id="newArea"></div>
+    </header>
+
+    <main>
+        <div id="searchForm">
+            <h2>Search Here!</h2>
+
+            <div id="search" class="searchParams">
+                <div id="searchFor">
+                    <label for="searchBy">Search by:</label>
+                    <select name="searchBy" id="searchBy">
+                        <option value="keyword">Keyword</option>
+                        <option value="title">Title</option>
+                    </select>
+                </div>
+
+                <div id="input">
+                    <input type="text" id="searchTerm" name="searchTerm">
+                </div>
+            </div>
+
+            <div id="filter" class="searchParams">
+                <label for="filterBy">Filter by:</label>
+                <select name="filterBy" id="filterBy">
+                    <option value="none">none</option>
+                    <option value="date">Date of release</option>
+                    <option value="director">Director</option>
+                </select>
+
+                <div id="filterInput">
+                </div>
+            </div>
+
+            <input id="searchButton" type="submit" value="Search">
+        </div>
+
+        <div id="results">
+            <h2>Results</h2>
+            <div id="loading"></div>
+            <div id="output">
+                Nothing yet...
+            </div>
+        </div>
+
+        <div id="modalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="" id="imageModal">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <a href="documentation.html">Documentation</a><br>
+        <a href="https://people.rit.edu/aam6039/235/">&copy;Audrey Main</a><br>
+        <a href="http://www.ghibli.jp/">&copy;STUDIO GHIBLI</a>
+    </footer>
+    <script src="JavaScript/myScript.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+/*#region Web Fonts (not working for now)*/
+
+@font-face {
+    font-family: 'robotobold';
+    src: url('../assets/fonts/roboto-bold-webfont.woff2') format('woff2'), url('../assets/fonts/roboto-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'robotoitalic';
+    src: url('../assets/fonts/roboto-italic-webfont.woff2') format('woff2'), url('../assets/fonts/roboto-italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'robotoregular';
+    src: url('../assets/fonts/roboto-regular-webfont.woff2') format('woff2'), url('../assets/fonts/roboto-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'noto_sans_jpbold';
+    src: url('../assets/fonts/notosansjp-bold-webfont.woff2') format('woff2'), url('../assets/fonts/notosansjp-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'noto_sans_jpregular';
+    src: url('../assets/fonts/notosansjp-regular-webfont.woff2') format('woff2'), url('../assets/fonts/notosansjp-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*#endregion */
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.25rem;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+    text-decoration: underline;
+    margin: 15px 0px;
+    font-weight:bold;
+}
+
+h1 {
+    font-size: 5rem;
+    text-align: center;
+    font-weight: lighter;
+}
+
+header {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 15%, rgba(0, 173, 239, 1) 100%);
+    padding: 5px;
+    display: grid;
+    grid-template-columns: minmax(400px, 700px) auto;
+    grid-template-rows: auto;
+    justify-items: center;
+}
+
+#logo {
+    max-width: 700px;
+}
+
+#headText {
+    margin: auto 10px;
+}
+
+main {
+    margin: 15px;
+}
+
+.searchParams {
+    margin: 5px 10px;
+}
+
+#searchTerm, #directorSearch, #dateRange {
+    margin-top: 8px;
+}
+
+#searchButton{
+    margin: 5px 10px;
+    height:50px;
+    width: 100px;
+}
+
+#results {
+    margin: 10px;
+}
+
+#output {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#output .resultItem {
+    margin: 1rem;
+    background: #ffffff;
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    box-shadow: 2px 4px 10px #b1b1b198;
+    overflow: hidden;
+    transition: all .2s linear;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#output .resultItem:hover {
+    box-shadow: 2px 8px 40px #373f518c;
+    transform: translate3D(0, -2px, 0);
+}
+
+#output .movieIMG {
+    margin: 30px 20px;
+}
+
+/* 
+#output .movieIMG:hover {
+    opacity: 0.9;
+} */
+
+#output .description {
+    margin: 10px;
+}
+
+#output h3 {
+    font-size: 1.65rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#output a h3:hover {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+#output a h3 {
+    color: black;
+}
+
+#output .summary {
+    padding: 1rem;
+    margin: 0;
+}
+
+#output .moreInfo {
+    margin: 0 1rem 1rem 1rem;
+    font-size: 1rem;
+}
+
+footer {
+    font-size: 1rem;
+    margin: 1rem 1.5rem;
+    line-height: 1.25rem;
+}
+
+@media screen and (max-width: 900px) {
+    #output .resultItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    header {
+        background: white;
+        grid-template-columns: minmax(60px, 100px) auto;
+        grid-template-rows: 140px 250px;
+        align-items: center;
+    }
+    h1 {
+        font-size: 60px;
+    }
+    #logo {
+        margin: 0;
+        grid-row: 1 / -1;
+        max-width: 100px;
+    }
+    #newArea {
+        grid-row: 2/3;
+        grid-column: 2/3;
+    }
+    #newArea img {
+        max-width: 200px;
+    }
+}
