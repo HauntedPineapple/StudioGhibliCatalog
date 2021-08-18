@@ -17,7 +17,7 @@ mediaQuery.addListener(changeLogo);
 changeLogo(mediaQuery);
 //#endregion
 
-//#region Locally Store Last Search Term
+//#region locally store last search term
 const prefix = "aam6039-";
 const termKey = prefix + "term"
 const searchText = document.querySelector("#searchTerm");
@@ -30,15 +30,92 @@ if (storedTerm) {
 searchText.onchange = e => { localStorage.setItem(termKey, e.target.value); };
 //#endregion
 
-
-//#region Search settings
 window.onload = (e) => { document.querySelector("#searchButton").onclick = searchButtonClicked };
-
 const parameterSelect = document.querySelector("#searchBy");
 const filterSelect = document.querySelector("#filterBy");
+let displayTerm = "";
+let isLoading = false;
+
+if (isLoading) {
+    document.querySelector("#output").innerHTML = '<img src="images/loading.gif" alt="loading!">';
+}
+
+function searchButtonClicked() {
+    if (!isLoading) {
+        isLoading = true;
+    }
+    const GHIBLI_URL = "https://ghibliapi.herokuapp.com/films";
+    let url = GHIBLI_URL;
+
+    let term = document.querySelector("#searchTerm").value;
+    displayTerm = term;
+    // get rid of leading and trailing spaces. URLs do not work with spaces!
+    term = term.trim();
+    // encodeURIComponent() will escape characters like spaces 
+    term = encodeURIComponent(term);
+    url += "?&q=" + term;
+
+    getData(url);
+}
+
+function getData(url) {
+    let request = new XMLHttpRequest();
+
+    request.onload = dataLoaded;
+    request.onerror = dataError;
+
+    // Open a new connection, using the GET request on the URL endpoint
+    // this specific URL gets the film data from the API
+    request.open('GET', url);
+    request.send()
+}
+
+function dataLoaded(e) {
+    let xhr = e.target;
+    let obj = JSON.parse(xhr.response);
+    let results = [];
+
+    if (parameterSelect.value == "title") {
+        results = searchTitle(document.querySelector("#searchTerm").value, obj);
+    }
+    if (parameterSelect.value == "keyword") {
+        results = searchKeyword(document.querySelector("#searchTerm").value, obj);
+    }
+
+    if (filterSelect.value == "date") {
+        let from = parseInt(dateRangeFROM.value);
+        let to = parseInt(dateRangeTO.value);
+
+        //if the range is not valid, break and print error message
+        if (to - from < 0) {
+            document.querySelector("#output").innerHTML = "<b>ERROR! Please enter a <i>valid</i> date range!</b>";
+            return;
+        }
+        results = searchDateRange(from, to, results);
+    }
+
+    if (filterSelect.value == "director") {
+        results = searchDirector(document.querySelector("#directorSearch").value, results);
+    }
+
+    if (!results || results.length <= 0 || e.status < 200 || e.status >= 400) {
+        let message = "<b>No results found for '" + displayTerm + "'</b>";
+        message += "<p><i>Try different search parameters or adjusting your filters!</i></p>";
+        document.querySelector("#output").innerHTML = message;
+        return;
+    }
+
+    createResults(results);
+    loading = false;
+}
+function dataError(e) {
+    console.log("An error just occurred!");
+    document.querySelector("#output").innerHTML = '<img src="images/s-404.png" alt="loading!"> <p>Oops, an error occured. Try again!</p>';
+}
+
+//#region Search framework
 filterSelect.onchange = changeFilterFor;
 function changeFilterFor(e) {
-
     if (filterSelect.value == "none") {
         document.querySelector("#filterInput").innerHTML = "";
     }
@@ -51,11 +128,9 @@ function changeFilterFor(e) {
         for (let i = 1985; i <= currentYear; i++) {
             dropdown += '<option value="' + i + '">' + i + '</option>';
         }
-
         let dateSelector_1 = '<select name="dataRangeFROM" id="dateRangeFROM">';
         dateSelector_1 += dropdown; //fill element with the dropdown
         dateSelector_1 += '</select>';
-
         dropdown = ""; //reset
         let dateSelector_2 = '<select name="dataRangeTO" id="dateRangeTO">';
         for (let i = 1985; i < currentYear; i++) {
@@ -79,96 +154,11 @@ function changeFilterFor(e) {
         dropdown += '<option value="yoshiaki">Yoshiaki Nishimura</option>'
         dropdown += '<option value="isao">Isao Takahata</option>'
         dropdown += '<option value="hiromasa">Hiromasa Yonebayashi</option>'
+        dropdown += '<option value="Michaël">Michaël Dudok de Wit</option>'
         dropdown += '</select>';
         document.querySelector("#filterInput").innerHTML = dropdown;
     }
 }
-//#endregion
-
-//#region  Main app framework
-let displayTerm = "";
-let isLoading = false;
-
-if (isLoading) {
-    document.querySelector("#output").innerHTML = '<img src="images/loading.gif" alt="loading!">';
-}
-
-function searchButtonClicked() {
-    if (!isLoading) {
-        isLoading = true;
-    }
-    const GHIBLI_URL = "https://ghibliapi.herokuapp.com/films";
-    let url = GHIBLI_URL;
-
-    let term = document.querySelector("#searchTerm").value;
-    displayTerm = term;
-
-    // get rid of leading and trailing spaces. URLs do not work with spaces!
-    term = term.trim();
-
-    // encodeURIComponent() will escape characters like spaces 
-    term = encodeURIComponent(term);
-
-    url += "?&q=" + term;
-
-    getData(url);
-}
-
-function getData(url) {
-    let request = new XMLHttpRequest();
-
-    request.onload = dataLoaded;
-    request.onerror = dataError;
-
-    // Open a new connection, using the GET request on the URL endpoint
-    // this specific URL gets the film data from the API
-    request.open('GET', url);
-    request.send()
-}
-
-function dataLoaded(e) {
-    let xhr = e.target;
-    //console.log(xhr.response);
-    let obj = JSON.parse(xhr.response);
-    //obj.forEach((movie) => { console.log(movie.title); })
-    let results = [];
-
-    if (parameterSelect.value == "title") {
-        results = searchTitle(document.querySelector("#searchTerm").value, obj);
-        //for (let i = 0; i < results.length; i++) { console.log(results[i]); }
-    }
-    if (parameterSelect.value == "keyword") {
-        results = searchKeyword(document.querySelector("#searchTerm").value, obj);
-        //for (let i = 0; i < results.length; i++) { console.log(results[i]); }
-    }
-
-    if (filterSelect.value == "date") {
-        let from = parseInt(dateRangeFROM.value);
-        let to = parseInt(dateRangeTO.value);
-
-        //if the range is not valid, break and print error message
-        if (to - from < 0) {
-            document.querySelector("#output").innerHTML = "<b>ERROR! Please enter a <i>valid</i> date range!</b>"
-            return;
-        }
-        results = searchDateRange(from, to, results);
-    }
-
-    if (filterSelect.value == "director") {
-        results = searchDirector(document.querySelector("#directorSearch").value, results);
-    }
-
-    if (!results || results.length <= 0 || e.status < 200 || e.status >= 400) {
-        let message = "<b>No results found for '" + displayTerm + "'</b>";
-        message += "<p><i>Try different search parameters or adjusting your filters!</i></p>";
-        document.querySelector("#output").innerHTML = message;
-        return;
-    }
-
-    createResults(results);
-    loading = false;
-}
-
 
 function searchKeyword(searchterm, resultsArray) {
     let returnedArr = [];
@@ -181,7 +171,6 @@ function searchKeyword(searchterm, resultsArray) {
     })
     return returnedArr;
 }
-
 function searchTitle(searchterm, resultsArray) {
     let returnedArr = [];
     searchterm = searchterm.trim();
@@ -193,7 +182,6 @@ function searchTitle(searchterm, resultsArray) {
     })
     return returnedArr;
 }
-
 function searchDateRange(fromDate, toDate, resultsArray) {
     let returnedArr = [];
     for (let i = fromDate; i <= toDate; i++) {
@@ -214,6 +202,7 @@ function searchDirector(directorName, resultsArray) {
     })
     return returnedArr;
 }
+//#endregion
 
 function createResults(data) {
     let outputArea = document.querySelector("#output");
@@ -280,9 +269,3 @@ function createResults(data) {
     // imageModalContainer.innerHTML = '<div class="modal-dialog"><div class="modal-content"> <div class="modal-body"><img src="//placehold.it/1000x600" class="img-responsive"></div></div></div>';
     // results.appendChild(imageModalContainer);
 }
-
-function dataError(e) {
-    console.log("An error just occurred!");
-    document.querySelector("#output").innerHTML = '<img src="images/s-404.png" alt="loading!"> <p>Oops, an error occured. Try again!</p>';
-}
-//#endregion
